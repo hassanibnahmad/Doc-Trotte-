@@ -32,8 +32,8 @@ const Contact = () => {
     {
       icon: <Phone className="w-6 h-6" />,
       title: "Téléphone",
-      value: "+212 6 12 34 56 78",
-      link: "tel:+212612345678"
+      value: "+32 472 97 41 60",
+      link: "tel:+32472974160"
     },
     {
       icon: <Mail className="w-6 h-6" />,
@@ -44,7 +44,7 @@ const Contact = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Localisation",
-      value: "Agadir, Maroc",
+      value: "Bruxelles, Belgique",
       link: "#"
     },
   ];
