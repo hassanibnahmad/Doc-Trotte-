@@ -472,7 +472,9 @@ const Admin = () => {
 
   const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+    if (!file) return;
+
+    try {
       // Check file size (5MB = 5 * 1024 * 1024 bytes)
       const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
       if (file.size > maxSizeInBytes) {
@@ -489,35 +491,49 @@ const Admin = () => {
         return;
       }
 
+      setLoading(true);
+      
+      // Create a promise-based FileReader to avoid event conflicts
+      const readFileAsDataURL = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (event) => {
+            if (event.target?.result) {
+              resolve(event.target.result as string);
+            } else {
+              reject(new Error('Failed to read file'));
+            }
+          };
+          reader.onerror = () => reject(new Error('Error reading file'));
+          reader.readAsDataURL(file);
+        });
+      };
+
       try {
-        setLoading(true);
+        const base64String = await readFileAsDataURL(file);
         
-        // For now, let's use a base64 approach but store it properly
-        const reader = new FileReader();
-        reader.onload = (event) => {
-          const base64String = event.target?.result as string;
-          
-          // Update editing post with the base64 string
-          if (editingPost) {
-            setEditingPost({
-              ...editingPost,
-              image_url: base64String
-            });
-          }
-          setLoading(false);
-        };
-        
-        reader.onerror = () => {
-          showAlert('error', 'Erreur lors du chargement de l\'image');
-          setLoading(false);
-        };
-        
-        reader.readAsDataURL(file);
-        
-      } catch (error) {
-        showAlert('error', 'Erreur lors du téléchargement de l\'image');
-        setLoading(false);
+        // Use functional state update to avoid stale closure issues
+        setEditingPost(prevPost => {
+          if (!prevPost) return prevPost;
+          return {
+            ...prevPost,
+            image_url: base64String
+          };
+        });
+
+        showAlert('success', 'Image téléchargée avec succès!');
+      } catch (readError) {
+        console.error('File reading error:', readError);
+        showAlert('error', 'Erreur lors du chargement de l\'image');
+        e.target.value = ''; // Reset file input
       }
+
+    } catch (error) {
+      console.error('Image upload error:', error);
+      showAlert('error', 'Erreur lors du téléchargement de l\'image');
+      e.target.value = ''; // Reset file input
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1330,12 +1346,13 @@ const Admin = () => {
                     Image * (Max 5MB - JPG, PNG, WebP)
                   </label>
                   <input
+                    key={`file-input-${editingPost?.id || 'new'}`}
                     type="file"
                     accept="image/jpeg,image/jpg,image/png,image/webp"
                     onChange={handleImageUpload}
                     disabled={loading}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-yellow-400 file:text-black disabled:opacity-50 disabled:cursor-not-allowed"
-                    required={!editingPost.image_url}
+                    required={!editingPost?.image_url}
                   />
                   
                   {/* Loading state for image upload */}
@@ -1347,17 +1364,24 @@ const Admin = () => {
                   )}
                   
                   {/* Image preview */}
-                  {editingPost.image_url && !loading && (
-                    <div className="mt-2">
+                  {editingPost?.image_url && !loading && (
+                    <div className="mt-2" key={`image-preview-${editingPost.id || 'new'}`}>
                       <img 
                         src={editingPost.image_url} 
                         alt="Preview" 
                         className="w-full h-80 object-cover rounded border-2 border-gray-600" 
-                        
                         onError={(e) => {
-                          e.currentTarget.src = 'https://via.placeholder.com/400x200/374151/9CA3AF?text=No+Image';
+                          const target = e.currentTarget;
+                          target.src = 'https://via.placeholder.com/400x200/374151/9CA3AF?text=No+Image';
+                        }}
+                        onLoad={() => {
+                          // Image loaded successfully
+                          console.log('Image preview loaded');
                         }}
                       />
+                      <p className="text-xs text-gray-400 mt-1">
+                        Aperçu de l'image sélectionnée
+                      </p>
                     </div>
                   )}
                 </div>
