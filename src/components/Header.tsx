@@ -1,7 +1,7 @@
 import  { useState } from 'react';
 import logo from '../assets/logo.png';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Phone } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -47,6 +47,18 @@ const Header = () => {
             ))}
           </nav>
 
+          {/* Phone Number - Desktop */}
+          <div className="hidden md:flex items-center">
+            <a
+              href="tel:+32472974160"
+              className="flex items-center space-x-2 px-4 py-2 bg-yellow-400 text-black rounded-lg hover:bg-yellow-300 transition-all duration-300 transform hover:scale-105 font-medium shadow-lg hover:shadow-yellow-400/25"
+              title="Appelez-nous maintenant"
+            >
+              <Phone size={18} className="animate-pulse" />
+              <span className="text-sm">+32 472 97 41 60</span>
+            </a>
+          </div>
+
           {/* Mobile menu button */}
           <button
             className="md:hidden p-2 rounded-md text-gray-400 hover:text-yellow-400 hover:bg-gray-800"
@@ -73,6 +85,22 @@ const Header = () => {
                 {item.label}
               </Link>
             ))}
+            
+            {/* Phone Number - Mobile */}
+            <div className="px-3 py-2 mt-4 border-t border-gray-700">
+              <a
+                href="tel:+32472974160"
+                className="flex items-center space-x-3 px-4 py-3 bg-yellow-400 text-black rounded-lg hover:bg-yellow-300 transition-all duration-300 font-medium shadow-lg text-center justify-center"
+                onClick={() => setIsMenuOpen(false)}
+                title="Appelez-nous maintenant"
+              >
+                <Phone size={20} className="animate-pulse" />
+                <span className="font-semibold">+32 472 97 41 60</span>
+              </a>
+              <p className="text-xs text-gray-400 text-center mt-2">
+                Cliquez pour appeler directement
+              </p>
+            </div>
           </nav>
         )}
       </div>

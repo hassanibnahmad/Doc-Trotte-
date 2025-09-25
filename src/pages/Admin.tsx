@@ -151,7 +151,6 @@ const Admin = () => {
 
   // Contact Submissions State
   const [contactSubmissions, setContactSubmissions] = useState<ContactSubmission[]>([]);
-  const [showContactSubmissions, setShowContactSubmissions] = useState(false);
   const [unreadCount, setUnreadCount] = useState(0);
   const [activeTab, setActiveTab] = useState<'blog' | 'contact'>('blog');
   const [resetPassword, setResetPassword] = useState({
@@ -520,16 +519,6 @@ const Admin = () => {
         setLoading(false);
       }
     }
-  };
-
-  // Password Change Functions
-  const handleChangePassword = () => {
-    setShowPasswordModal(true);
-    setPasswordChange({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    });
   };
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
@@ -1549,7 +1538,7 @@ const Admin = () => {
                 <p className="text-gray-500">Les messages du formulaire de contact apparaîtront ici</p>
               </div>
             ) : (
-              <div>
+              <>
                 {/* Desktop table view */}
                 <div className="hidden lg:block bg-gray-800 rounded-xl border border-gray-700 overflow-hidden">
                   <div className="overflow-x-auto">
@@ -1755,7 +1744,7 @@ const Admin = () => {
                     </div>
                   ))}
                 </div>
-              </div>
+              </>
             )}
           </div>
         )}
