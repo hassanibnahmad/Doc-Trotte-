@@ -24,7 +24,7 @@ const features = [
 const avis = [
   {
     name: 'Sophie L.',
-    review: 'Service rapide et équipe très professionnelle. Je recommande vivement DocTrotte !',
+    review: 'Service rapide et équipe très professionnelle. Je recommande vivement DocTrot !',
     avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
   },
   {
@@ -64,19 +64,19 @@ const Home = () => {
           }}
         />
         <div className="relative z-10 text-center max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center">
-          <span className="inline-flex items-center justify-center w-36 h-36 mb-6 rounded-full shadow-lg animate-bounce-slow">
+          <div className="mb-8 relative">
             <img
               src={logo}
-              alt="Doc'Trotte Logo"
-              className="w-28 h-28 object-contain hover:scale-110 hover:rotate-6 transition-transform duration-500"
+              alt="Doc'Trot Logo"
+              className="h-32 md:h-40 w-auto object-contain hover:scale-105 transition-all duration-700 drop-shadow-2xl"
               style={{ 
-                animation: 'glowPulse 3s ease-in-out infinite'
+                filter: 'drop-shadow(0 0 20px rgba(250, 204, 21, 0.5))',
+                animation: 'gentleBounce 4s ease-in-out infinite, glow 3s ease-in-out infinite alternate'
               }}
               //data-aos="zoom-in"
             />
-          </span>
+          </div>
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-6 animate-fade-in">
-            Doc'Trotte ⚡ <br />
             <span className="text-yellow-400">Votre partenaire mobilité électrique</span>
           </h1>
           <p className="text-xl md:text-2xl text-gray-200 mb-8 animate-fade-in delay-300">

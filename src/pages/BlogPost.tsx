@@ -2,37 +2,41 @@ import  { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { Calendar, User, ArrowLeft, Tag } from 'lucide-react';
 import trotinette2 from '../assets/trotinette2.webp';
-
-interface BlogPost {
-  id: number;
-  title: string;
-  excerpt: string;
-  content: string;
-  image: string;
-  author: string;
-  date: string;
-  category: string;
-}
+import { blogService, type BlogPost } from '../lib/supabase';
 
 const BlogPost = () => {
   const { id } = useParams();
   const [post, setPost] = useState<BlogPost | null>(null);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const savedPosts = localStorage.getItem('blogPosts');
-    if (savedPosts) {
-      const posts: BlogPost[] = JSON.parse(savedPosts);
-      const currentPost = posts.find(p => p.id === parseInt(id || '0'));
-      setPost(currentPost || null);
+    const fetchPost = async () => {
+      if (!id) return;
       
-      if (currentPost) {
-        const related = posts
-          .filter(p => p.id !== currentPost.id && p.category === currentPost.category)
-          .slice(0, 3);
-        setRelatedPosts(related);
+      try {
+        setLoading(true);
+        const postId = parseInt(id);
+        const fetchedPost = await blogService.getPostById(postId);
+        
+        if (fetchedPost) {
+          setPost(fetchedPost);
+          
+          // Fetch related posts from the same category
+          const allPosts = await blogService.getAllPosts();
+          const related = allPosts
+            .filter(p => p.id !== postId && p.category === fetchedPost.category)
+            .slice(0, 3);
+          setRelatedPosts(related);
+        }
+      } catch (error) {
+
+      } finally {
+        setLoading(false);
       }
-    }
+    };
+
+    fetchPost();
   }, [id]);
 
   const formatDate = (dateString: string) => {
@@ -42,6 +46,16 @@ const BlogPost = () => {
       day: 'numeric'
     });
   };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen pt-16 flex items-center justify-center bg-gray-900">
+        <div className="text-center">
+          <p className="text-xl text-gray-400">Chargement de l'article...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!post) {
     return (
@@ -95,9 +109,13 @@ const BlogPost = () => {
           </h1>
 
           <img data-aos="zoom-in"
-            src={trotinette2}
+            src={post.image_url || trotinette2}
             alt={post.title}
             className="w-full h-64 md:h-96 object-cover rounded-xl shadow-2xl"
+            onError={(e) => {
+
+              e.currentTarget.src = trotinette2;
+            }}
           />
         </header>
 
@@ -130,7 +148,7 @@ const BlogPost = () => {
                   className="bg-gray-800/50 border border-gray-700 rounded-xl overflow-hidden hover:border-yellow-400/30 hover:bg-gray-800/70 transform hover:-translate-y-2 transition-all duration-500"
                 >
                   <img data-aos="zoom-in"
-                    src={relatedPost.image}
+                    src={relatedPost.image_url === 'trotinette2.webp' ? trotinette2 : relatedPost.image_url}
                     alt={relatedPost.title}
                     className="w-full h-32 object-cover"
                   />

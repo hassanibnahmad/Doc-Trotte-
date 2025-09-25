@@ -12,9 +12,9 @@ const Footer = () => {
   };
 
   const socialLinks = [
-    { icon: <Facebook className="w-5 h-5" />, href: "https://facebook.com/doctrotte", label: "Facebook" },
-    { icon: <Instagram className="w-5 h-5" />, href: "https://instagram.com/doctrotte", label: "Instagram" },
-    { icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/doctrotte", label: "Twitter" },
+    { icon: <Facebook className="w-5 h-5" />, href: "https://facebook.com/doctrot", label: "Facebook" },
+    { icon: <Instagram className="w-5 h-5" />, href: "https://instagram.com/doctrot", label: "Instagram" },
+    { icon: <Twitter className="w-5 h-5" />, href: "https://twitter.com/doctrot", label: "Twitter" },
   ];
 
   const quickLinks = [
@@ -31,18 +31,14 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8">
           {/* Logo and Description */}
           <div className="md:col-span-2">
-            <Link to="/" className="flex items-center space-x-3 mb-4 group">
-              <span className="inline-flex items-center justify-center w-16 h-16 bg-white rounded-full shadow group">
+            <Link to="/" className="flex items-center space-x-4 mb-4 group">
+              <div className="relative">
                 <img
                   src={logo}
-                  alt="Doc'Trotte Logo"
-                  className="w-[68px] h-[68px] object-contain transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
-                  style={{ filter: 'drop-shadow(0 0 8px #facc15)' }}
+                  alt="Doc'Trot Logo"
+                  className="h-20 w-auto object-contain transition-all duration-500 group-hover:scale-105 drop-shadow-lg"
+                  style={{ filter: 'drop-shadow(0 2px 12px rgba(250, 204, 21, 0.4))' }}
                 />
-              </span>
-              <div>
-                <span className="text-2xl font-bold text-white">Doc'Trotte</span>
-                <div className="text-sm text-yellow-400">Mobilité électrique</div>
               </div>
             </Link>
             <p className="text-gray-300 mb-6 max-w-md">
@@ -92,7 +88,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center text-gray-300">
                 <Mail className="w-4 h-4 mr-3 text-yellow-400" />
-                <span>contact@doctrotte.com</span>
+                <span>doctrot@outlook.be</span>
               </div>
               <div className="flex items-center text-gray-300">
                 <MapPin className="w-4 h-4 mr-3 text-yellow-400" />
@@ -105,7 +101,7 @@ const Footer = () => {
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-col sm:flex-row justify-between items-center">
             <p className="text-gray-400 mb-4 sm:mb-0">
-              © 2025 Doc'Trotte. Tous droits réservés.
+              © 2025 Doc'Trot. Tous droits réservés.
             </p>
             <button
               onClick={scrollToTop}

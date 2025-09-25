@@ -1,24 +1,48 @@
 import React, { useState } from 'react';
-import { Phone, Mail, MapPin, Send, CheckCircle } from 'lucide-react';
+import { Phone, Mail, MapPin, Send, CheckCircle, AlertCircle } from 'lucide-react';
+import { blogService } from '../lib/supabase';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    phone: '',
     subject: '',
     message: ''
   });
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate form submission
-    console.log('Form submitted:', formData);
-    setIsSubmitted(true);
-    setTimeout(() => {
-      setIsSubmitted(false);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-    }, 3000);
+    setIsSubmitting(true);
+    setSubmitError('');
+
+    try {
+      // Submit to database
+      const success = await blogService.createContactSubmission({
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone || undefined,
+        subject: formData.subject || undefined,
+        message: formData.message
+      });
+
+      if (success) {
+        setIsSubmitted(true);
+        setTimeout(() => {
+          setIsSubmitted(false);
+          setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+        }, 4000);
+      } else {
+        setSubmitError('Erreur lors de l\'envoi du message. Veuillez réessayer.');
+      }
+    } catch (error) {
+      setSubmitError('Erreur lors de l\'envoi du message. Veuillez réessayer.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -38,8 +62,8 @@ const Contact = () => {
     {
       icon: <Mail className="w-6 h-6" />,
       title: "Email",
-      value: "contact@doctrotte.com",
-      link: "mailto:contact@doctrotte.com"
+      value: "doctrot@outlook.be",
+      link: "mailto:doctrot@outlook.be"
     },
     {
       icon: <MapPin className="w-6 h-6" />,
@@ -125,8 +149,23 @@ const Contact = () => {
                   </div>
                   
                   <div>
+                    <label htmlFor="phone" className="block text-sm font-medium text-gray-300 mb-2">
+                      Téléphone <span className="text-gray-500">(optionnel)</span>
+                    </label>
+                    <input
+                      type="tel"
+                      id="phone"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
+                      placeholder="+32 xxx xxx xxx"
+                    />
+                  </div>
+                  
+                  <div>
                     <label htmlFor="subject" className="block text-sm font-medium text-gray-300 mb-2">
-                      Sujet
+                      Sujet <span className="text-gray-500">(optionnel)</span>
                     </label>
                     <input
                       type="text"
@@ -134,7 +173,6 @@ const Contact = () => {
                       name="subject"
                       value={formData.subject}
                       onChange={handleChange}
-                      required
                       className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:ring-2 focus:ring-yellow-400 focus:border-transparent transition-all"
                       placeholder="Sujet de votre message"
                     />
@@ -156,12 +194,34 @@ const Contact = () => {
                     />
                   </div>
                   
+                  {/* Error Message */}
+                  {submitError && (
+                    <div className="flex items-center p-4 bg-red-900/20 border border-red-500/50 rounded-lg">
+                      <AlertCircle className="w-5 h-5 text-red-400 mr-2" />
+                      <span className="text-red-400">{submitError}</span>
+                    </div>
+                  )}
+                  
                   <button
                     type="submit"
-                    className="w-full flex items-center justify-center px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transform hover:scale-105 transition-all duration-300"
+                    disabled={isSubmitting}
+                    className={`w-full flex items-center justify-center px-6 py-3 font-semibold rounded-lg transform transition-all duration-300 ${
+                      isSubmitting
+                        ? 'bg-gray-600 text-gray-300 cursor-not-allowed'
+                        : 'bg-yellow-400 text-black hover:bg-yellow-300 hover:scale-105'
+                    }`}
                   >
-                    <Send className="w-5 h-5 mr-2" />
-                    Envoyer
+                    {isSubmitting ? (
+                      <>
+                        <div className="w-5 h-5 mr-2 border-2 border-gray-400 border-t-transparent rounded-full animate-spin"></div>
+                        Envoi en cours...
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-5 h-5 mr-2" />
+                        Envoyer
+                      </>
+                    )}
                   </button>
                 </form>
               )}

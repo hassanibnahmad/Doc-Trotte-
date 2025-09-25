@@ -12,6 +12,29 @@ dist
 dist-ssr
 *.local
 
+# Environment variables
+.env
+.env.local
+.env.production
+.env.development
+
+# Debug and test files
+debug-*.js
+test-*.js
+check-*.js
+cleanup-*.js
+*.test.js
+
+# Development directories with sensitive data
+dev-tools/
+database/
+
+# Development documentation
+ADMIN-SETUP.md
+CONTACT-SETUP.md
+EMAILJS-SETUP.md
+test-*.sql
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

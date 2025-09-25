@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 const WhatsAppButton = () => {
   const location = useLocation();
   const phoneNumber = "+32472974160"; // Replace with your actual WhatsApp number
-  const message = "Bonjour Doc'Trotte! J'aimerais avoir des informations sur vos services.";
+  const message = "Bonjour Doc'Trot! J'aimerais avoir des informations sur vos services.";
   
   // Hide the button on admin page
   if (location.pathname === '/admin') {

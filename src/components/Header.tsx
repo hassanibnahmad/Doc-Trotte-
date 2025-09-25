@@ -19,18 +19,14 @@ const Header = () => {
     <header className="bg-black/90 backdrop-blur-sm border-b border-yellow-400/20 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="flex items-center space-x-2 group">
-            <span className="inline-flex items-center justify-center w-14 h-14 bg-white rounded-full shadow">
+          <Link to="/" className="flex items-center space-x-3 group">
+            <div className="relative">
               <img
                 src={logo}
-                alt="Doc'Trotte Logo"
-                className="w-[52px] h-[52px] object-contain transition-transform duration-500 group-hover:rotate-12 group-hover:scale-110"
-                style={{ filter: 'drop-shadow(0 0 8px #facc15)' }}
+                alt="Doc'Trot Logo"
+                className="h-16 w-auto object-contain transition-all duration-500 group-hover:scale-105 drop-shadow-lg"
+                style={{ filter: 'drop-shadow(0 2px 8px rgba(250, 204, 21, 0.3))' }}
               />
-            </span>
-            <div>
-              <span className="text-xl font-bold text-white">Doc'Trotte</span>
-              <div className="text-xs text-yellow-400">Mobilité électrique</div>
             </div>
           </Link>
 
