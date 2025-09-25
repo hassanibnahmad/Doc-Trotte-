@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { Lock, Plus, Edit2, Trash2, Eye, EyeOff, Save, X, CheckCircle, AlertCircle, Info, Home, Mail, MessageSquare, Users, Clock, CheckCircle2 } from 'lucide-react';
 import { blogService, adminService, type BlogPost, type BlogPostSummary, type ContactSubmission } from '../lib/supabase';
+import ImageUpload from '../components/ImageUpload';
 
 // Custom Alert Component
 interface AlertProps {
@@ -429,8 +430,7 @@ const Admin = () => {
         // Clear cache and reload posts from database
         setPostCache(new Map());
         await loadPosts();
-        setShowModal(false);
-        setEditingPost(null);
+        closeModal();
         showAlert('success', 'Article sauvegardé avec succès!');
       } else {
         showAlert('error', 'Erreur lors de la sauvegarde');
@@ -470,72 +470,20 @@ const Admin = () => {
     showConfirm('Êtes-vous sûr de vouloir supprimer cet article ?', confirmDelete);
   };
 
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      // Check file size (5MB = 5 * 1024 * 1024 bytes)
-      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
-      if (file.size > maxSizeInBytes) {
-        showAlert('error', 'La taille de l\'image ne peut pas dépasser 5MB. Veuillez choisir une image plus petite.');
-        e.target.value = ''; // Reset file input
-        return;
-      }
-
-      // Check file type
-      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
-      if (!allowedTypes.includes(file.type)) {
-        showAlert('error', 'Format d\'image non supporté. Veuillez utiliser JPG, PNG ou WebP.');
-        e.target.value = ''; // Reset file input
-        return;
-      }
-
-      setLoading(true);
-      
-      // Create a promise-based FileReader to avoid event conflicts
-      const readFileAsDataURL = (file: File): Promise<string> => {
-        return new Promise((resolve, reject) => {
-          const reader = new FileReader();
-          reader.onload = (event) => {
-            if (event.target?.result) {
-              resolve(event.target.result as string);
-            } else {
-              reject(new Error('Failed to read file'));
-            }
-          };
-          reader.onerror = () => reject(new Error('Error reading file'));
-          reader.readAsDataURL(file);
-        });
+  const handleImageSelect = (imageUrl: string) => {
+    setEditingPost(prevPost => {
+      if (!prevPost) return prevPost;
+      return {
+        ...prevPost,
+        image_url: imageUrl
       };
-
-      try {
-        const base64String = await readFileAsDataURL(file);
-        
-        // Use functional state update to avoid stale closure issues
-        setEditingPost(prevPost => {
-          if (!prevPost) return prevPost;
-          return {
-            ...prevPost,
-            image_url: base64String
-          };
-        });
-
-        showAlert('success', 'Image téléchargée avec succès!');
-      } catch (readError) {
-        console.error('File reading error:', readError);
-        showAlert('error', 'Erreur lors du chargement de l\'image');
-        e.target.value = ''; // Reset file input
-      }
-
-    } catch (error) {
-      console.error('Image upload error:', error);
-      showAlert('error', 'Erreur lors du téléchargement de l\'image');
-      e.target.value = ''; // Reset file input
-    } finally {
-      setLoading(false);
-    }
+    });
   };
+
+  const closeModal = useCallback(() => {
+    setShowModal(false);
+    setEditingPost(null);
+  }, []);
 
   const handlePasswordSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -1261,7 +1209,7 @@ const Admin = () => {
                   {editingPost.id ? 'Modifier' : 'Créer'} un article
                 </h2>
                 <button
-                  onClick={() => setShowModal(false)}
+                  onClick={closeModal}
                   className="text-gray-400 hover:text-white"
                 >
                   <X className="w-6 h-6" />
@@ -1341,50 +1289,14 @@ const Admin = () => {
                   </div>
                 </div>
                 
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Image * (Max 5MB - JPG, PNG, WebP)
-                  </label>
-                  <input
-                    key={`file-input-${editingPost?.id || 'new'}`}
-                    type="file"
-                    accept="image/jpeg,image/jpg,image/png,image/webp"
-                    onChange={handleImageUpload}
-                    disabled={loading}
-                    className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:bg-yellow-400 file:text-black disabled:opacity-50 disabled:cursor-not-allowed"
-                    required={!editingPost?.image_url}
-                  />
-                  
-                  {/* Loading state for image upload */}
-                  {loading && (
-                    <div className="mt-2 flex items-center text-yellow-400">
-                      <div className="w-4 h-4 mr-2 border-2 border-yellow-400 border-t-transparent rounded-full animate-spin"></div>
-                      Téléchargement de l'image...
-                    </div>
-                  )}
-                  
-                  {/* Image preview */}
-                  {editingPost?.image_url && !loading && (
-                    <div className="mt-2" key={`image-preview-${editingPost.id || 'new'}`}>
-                      <img 
-                        src={editingPost.image_url} 
-                        alt="Preview" 
-                        className="w-full h-80 object-cover rounded border-2 border-gray-600" 
-                        onError={(e) => {
-                          const target = e.currentTarget;
-                          target.src = 'https://via.placeholder.com/400x200/374151/9CA3AF?text=No+Image';
-                        }}
-                        onLoad={() => {
-                          // Image loaded successfully
-                          console.log('Image preview loaded');
-                        }}
-                      />
-                      <p className="text-xs text-gray-400 mt-1">
-                        Aperçu de l'image sélectionnée
-                      </p>
-                    </div>
-                  )}
-                </div>
+                <ImageUpload
+                  currentImage={editingPost?.image_url}
+                  onImageSelect={handleImageSelect}
+                  onError={(message) => showAlert('error', message)}
+                  onSuccess={(message) => showAlert('success', message)}
+                  isRequired={!editingPost?.image_url}
+                  disabled={loading}
+                />
                 
                 <div className="flex flex-col sm:flex-row gap-3 pt-4">
                   <button
@@ -1406,7 +1318,7 @@ const Admin = () => {
                   </button>
                   <button
                     type="button"
-                    onClick={() => setShowModal(false)}
+                    onClick={closeModal}
                     className="flex-1 py-2 bg-gray-600 text-white font-medium rounded hover:bg-gray-500 transition-colors"
                   >
                     Annuler
