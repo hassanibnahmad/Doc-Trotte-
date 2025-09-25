@@ -1,10 +1,172 @@
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="src/assets/logo.png" />
+    
+    <!-- Favicon and Icons -->
+    <link rel="icon" type="image/png" href="/src/assets/logo.png" />
+    <link rel="apple-touch-icon" href="/src/assets/logo.png" />
+    
+    <!-- Viewport and Mobile Optimization -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Doc&#39;Trot - Electric Mobility Website</title>
+    
+    <!-- Primary Meta Tags for SEO -->
+    <title>Doc'Trot - Expert en Réparation et Vente de Trottinettes Électriques</title>
+    <meta name="title" content="Doc'Trot - Expert en Réparation et Vente de Trottinettes Électriques" />
+    <meta name="description" content="Doc'Trot : Spécialiste de la mobilité électrique. Réparation express, vente de trottinettes électriques, accessoires et conseils d'experts. Service rapide et professionnel." />
+    <meta name="keywords" content="trottinette électrique, réparation trottinette, vente trottinette, mobilité électrique, Doc'Trot, réparation express, accessoires trottinette, conseil mobilité, maintenance trottinette, pièces détachées" />
+    <meta name="author" content="Doc'Trot" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="language" content="French" />
+    <meta name="revisit-after" content="7 days" />
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://doc-trotte.vercel.app/" />
+    <meta property="og:title" content="Doc'Trot - Expert en Réparation et Vente de Trottinettes Électriques" />
+    <meta property="og:description" content="Spécialiste de la mobilité électrique. Réparation express, vente de trottinettes électriques, accessoires et conseils d'experts." />
+    <meta property="og:image" content="https://doc-trotte.vercel.app/src/assets/logo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Doc'Trot" />
+    <meta property="og:locale" content="fr_FR" />
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://doc-trotte.vercel.app/" />
+    <meta property="twitter:title" content="Doc'Trot - Expert en Réparation et Vente de Trottinettes Électriques" />
+    <meta property="twitter:description" content="Spécialiste de la mobilité électrique. Réparation express, vente de trottinettes électriques, accessoires et conseils d'experts." />
+    <meta property="twitter:image" content="https://doc-trotte.vercel.app/src/assets/logo.png" />
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://doc-trotte.vercel.app/" />
+    
+    <!-- Geo Location (if you have a physical location) -->
+    <meta name="geo.region" content="BE" />
+    <meta name="geo.placename" content="Belgique" />
+    <meta name="ICBM" content="50.8503, 4.3517" />
+    
+    <!-- Business Information -->
+    <meta name="contact" content="+32472974160" />
+    <meta name="copyright" content="© 2025 Doc'Trot. Tous droits réservés." />
+    
+    <!-- Structured Data - Local Business -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "LocalBusiness",
+      "name": "Doc'Trot",
+      "description": "Expert en réparation et vente de trottinettes électriques. Service professionnel et conseil personnalisé.",
+      "url": "https://doc-trotte.vercel.app",
+      "telephone": "+32472974160",
+      "priceRange": "€€",
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "BE"
+      },
+      "geo": {
+        "@type": "GeoCoordinates",
+        "latitude": "50.8503",
+        "longitude": "4.3517"
+      },
+      "openingHours": [
+        "Mo-Fr 09:00-18:00",
+        "Sa 09:00-17:00"
+      ],
+      "serviceArea": {
+        "@type": "GeoCircle",
+        "geoMidpoint": {
+          "@type": "GeoCoordinates",
+          "latitude": "50.8503",
+          "longitude": "4.3517"
+        },
+        "geoRadius": "50000"
+      },
+      "hasOfferCatalog": {
+        "@type": "OfferCatalog",
+        "name": "Services Doc'Trot",
+        "itemListElement": [
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Service",
+              "name": "Réparation Express Trottinettes",
+              "description": "Service de réparation rapide et professionnel"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Vente Trottinettes Électriques",
+              "description": "Large gamme de trottinettes électriques"
+            }
+          },
+          {
+            "@type": "Offer",
+            "itemOffered": {
+              "@type": "Product",
+              "name": "Accessoires et Pièces",
+              "description": "Accessoires et pièces détachées"
+            }
+          }
+        ]
+      },
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "reviewCount": "127"
+      },
+      "sameAs": [
+        "https://doc-trotte.vercel.app"
+      ]
+    }
+    </script>
+    
+    <!-- Structured Data - Website -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Doc'Trot",
+      "url": "https://doc-trotte.vercel.app",
+      "description": "Site officiel de Doc'Trot - Expert en mobilité électrique",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Doc'Trot"
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://doc-trotte.vercel.app/search?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- Performance and Loading Optimization -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+    <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+    
+    <!-- Preload critical resources -->
+    <link rel="preload" href="/src/assets/logo.png" as="image" type="image/png" />
+    
+    <!-- Security Headers -->
+    <meta http-equiv="X-Content-Type-Options" content="nosniff" />
+    <meta http-equiv="X-Frame-Options" content="DENY" />
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
+    
+    <!-- Theme Color for Mobile Browsers -->
+    <meta name="theme-color" content="#FACC15" />
+    <meta name="msapplication-TileColor" content="#FACC15" />
+    
+    <!-- Alternative Languages -->
+    <link rel="alternate" hreflang="fr" href="https://doc-trotte.vercel.app/" />
+    <link rel="alternate" hreflang="x-default" href="https://doc-trotte.vercel.app/" />
   </head>
   <body>
     <div id="root"></div>
