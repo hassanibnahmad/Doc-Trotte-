@@ -152,12 +152,8 @@
     <link rel="dns-prefetch" href="//fonts.googleapis.com" />
     <link rel="dns-prefetch" href="//fonts.gstatic.com" />
     
-    <!-- Preload critical resources -->
-    <link rel="preload" href="/src/assets/logo.png" as="image" type="image/png" />
-    
-    <!-- Security Headers -->
+    <!-- Security Headers (Note: X-Frame-Options should be set on server level) -->
     <meta http-equiv="X-Content-Type-Options" content="nosniff" />
-    <meta http-equiv="X-Frame-Options" content="DENY" />
     <meta http-equiv="X-XSS-Protection" content="1; mode=block" />
     
     <!-- Theme Color for Mobile Browsers -->
@@ -170,6 +166,16 @@
   </head>
   <body>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
+    <script type="module" src="/src/main.jsx" defer></script>
+    
+    <!-- Fallback for users with JavaScript disabled -->
+    <noscript>
+      <div style="text-align: center; padding: 50px; font-family: Arial, sans-serif;">
+        <h1>Doc'Trot - Expert en Mobilité Électrique</h1>
+        <p>JavaScript est requis pour afficher ce site web correctement.</p>
+        <p>Veuillez activer JavaScript dans votre navigateur.</p>
+        <p>Pour nous contacter: <a href="tel:+32472974160">+32 472 97 41 60</a></p>
+      </div>
+    </noscript>
   </body>
 </html>
