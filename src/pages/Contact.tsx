@@ -68,8 +68,8 @@ const Contact = () => {
     {
       icon: <MapPin className="w-6 h-6" />,
       title: "Localisation",
-      value: "Bruxelles, Belgique",
-      link: "#"
+      value: "Rue de merode 106 Saint Gilles, Bruxelles, Belgique",
+      link: "https://maps.app.goo.gl/PPXJgh24DwxUHmVg6"
     },
   ];
 

@@ -92,7 +92,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center text-gray-300">
                 <MapPin className="w-4 h-4 mr-3 text-yellow-400" />
-                <span>Bruxelles, Belgique</span>
+                <span>Rue de merode 106 Saint Gilles, Bruxelles, Belgique</span>
               </div>
             </div>
           </div>

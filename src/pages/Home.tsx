@@ -143,9 +143,9 @@ const Home = () => {
       <section className="py-20 bg-gray-900" data-aos="fade-up">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl md:text-4xl font-bold text-yellow-400 mb-6 animate-fade-in">Nous rendre visite</h2>
-          <p className="text-lg text-gray-200 mb-8">Retrouvez-nous à Bruxelles, Belgique. Cliquez ci-dessous pour ouvrir notre emplacement sur Google Maps.</p>
+          <p className="text-lg text-gray-200 mb-8">Retrouvez-nous à Rue de merode 106 Saint Gilles, Bruxelles, Belgique. Cliquez ci-dessous pour ouvrir notre emplacement sur Google Maps.</p>
           <a
-            href="https://www.google.com/maps?q=Bruxelles,Belgique"
+            href="https://maps.app.goo.gl/PPXJgh24DwxUHmVg6"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-block px-8 py-4 bg-yellow-400 text-black font-semibold rounded-full shadow-lg hover:bg-yellow-300 hover:scale-105 hover:shadow-2xl transition-all duration-300 animate-bounce-slow"
