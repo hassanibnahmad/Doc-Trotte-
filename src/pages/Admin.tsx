@@ -471,7 +471,7 @@ const Admin = () => {
     showConfirm('Êtes-vous sûr de vouloir supprimer cet article ?', confirmDelete);
   };
 
-  const handleImageSelect = (imageUrl: string) => {
+  const handleImageSelect = useCallback((imageUrl: string) => {
     setEditingPost(prevPost => {
       if (!prevPost) return prevPost;
       return {
@@ -479,7 +479,32 @@ const Admin = () => {
         image_url: imageUrl
       };
     });
-  };
+  }, []);
+
+  // Stable onChange handlers
+  const handleTitleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingPost(prev => prev ? {...prev, title: e.target.value} : null);
+  }, []);
+
+  const handleExcerptChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditingPost(prev => prev ? {...prev, excerpt: e.target.value} : null);
+  }, []);
+
+  const handleContentChange = useCallback((e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setEditingPost(prev => prev ? {...prev, content: e.target.value} : null);
+  }, []);
+
+  const handleCategoryChange = useCallback((e: React.ChangeEvent<HTMLSelectElement>) => {
+    setEditingPost(prev => prev ? {...prev, category: e.target.value} : null);
+  }, []);
+
+  const handleDateChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setEditingPost(prev => prev ? {...prev, date: e.target.value} : null);
+  }, []);
+
+  // Stable alert handlers
+  const onImageError = useCallback((message: string) => showAlert('error', message), []);
+  const onImageSuccess = useCallback((message: string) => showAlert('success', message), []);
 
   const closeModal = useCallback(() => {
     setShowModal(false);
@@ -1203,7 +1228,7 @@ const Admin = () => {
 
         {/* Modal */}
         {showModal && editingPost && createPortal(
-          <div key={`modal-${editingPost.id || 'new'}-${Date.now()}`} className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-white">
@@ -1217,16 +1242,15 @@ const Admin = () => {
                 </button>
               </div>
               
-              <form onSubmit={handleSavePost} className="space-y-4" key={`form-${editingPost.id || 'new'}`}>
+              <form onSubmit={handleSavePost} className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Titre *
                   </label>
                   <input
-                    key={`title-${editingPost.id || 'new'}`}
                     type="text"
                     value={editingPost.title || ''}
-                    onChange={(e) => setEditingPost({...editingPost, title: e.target.value})}
+                    onChange={handleTitleChange}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
                     required
                   />
@@ -1237,9 +1261,8 @@ const Admin = () => {
                     Extrait *
                   </label>
                   <textarea
-                    key={`excerpt-${editingPost.id || 'new'}`}
                     value={editingPost.excerpt || ''}
-                    onChange={(e) => setEditingPost({...editingPost, excerpt: e.target.value})}
+                    onChange={handleExcerptChange}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
                     rows={3}
                     required
@@ -1251,9 +1274,8 @@ const Admin = () => {
                     Contenu *
                   </label>
                   <textarea
-                    key={`content-${editingPost.id || 'new'}`}
                     value={editingPost.content || ''}
-                    onChange={(e) => setEditingPost({...editingPost, content: e.target.value})}
+                    onChange={handleContentChange}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
                     rows={8}
                     required
@@ -1266,9 +1288,8 @@ const Admin = () => {
                       Catégorie *
                     </label>
                     <select
-                      key={`category-${editingPost.id || 'new'}`}
                       value={editingPost.category || ''}
-                      onChange={(e) => setEditingPost({...editingPost, category: e.target.value})}
+                      onChange={handleCategoryChange}
                       className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
                       required
                     >
@@ -1285,10 +1306,9 @@ const Admin = () => {
                       Date *
                     </label>
                     <input
-                      key={`date-${editingPost.id || 'new'}`}
                       type="date"
                       value={editingPost.date || ''}
-                      onChange={(e) => setEditingPost({...editingPost, date: e.target.value})}
+                      onChange={handleDateChange}
                       className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
                       required
                     />
@@ -1296,11 +1316,11 @@ const Admin = () => {
                 </div>
                 
                 <ImageUpload
-                  key={`image-upload-${editingPost.id || 'new'}`}
+                  key={editingPost?.id ? `edit-${editingPost.id}` : 'new'}
                   currentImage={editingPost?.image_url}
                   onImageSelect={handleImageSelect}
-                  onError={(message) => showAlert('error', message)}
-                  onSuccess={(message) => showAlert('success', message)}
+                  onError={onImageError}
+                  onSuccess={onImageSuccess}
                   isRequired={!editingPost?.image_url}
                   disabled={loading}
                 />
