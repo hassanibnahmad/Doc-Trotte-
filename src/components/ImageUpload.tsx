@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 
 interface ImageUploadProps {
   currentImage?: string;
@@ -72,9 +72,18 @@ const ImageUpload: React.FC<ImageUploadProps> = ({
   }, [onImageSelect, onError, onSuccess]);
 
   // Update preview when currentImage changes
-  useState(() => {
+  useEffect(() => {
     setPreviewUrl(currentImage || '');
-  });
+  }, [currentImage]);
+
+  // Cleanup file input on component unmount
+  useEffect(() => {
+    return () => {
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    };
+  }, []);
 
   return (
     <div className="space-y-3">

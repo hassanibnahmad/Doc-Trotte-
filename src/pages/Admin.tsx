@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
 import { Lock, Plus, Edit2, Trash2, Eye, EyeOff, Save, X, CheckCircle, AlertCircle, Info, Home, Mail, MessageSquare, Users, Clock, CheckCircle2 } from 'lucide-react';
 import { blogService, adminService, type BlogPost, type BlogPostSummary, type ContactSubmission } from '../lib/supabase';
@@ -1201,8 +1202,8 @@ const Admin = () => {
         )}
 
         {/* Modal */}
-        {showModal && editingPost && (
-          <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+        {showModal && editingPost && createPortal(
+          <div key={`modal-${editingPost.id || 'new'}-${Date.now()}`} className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
             <div className="bg-gray-800 rounded-xl p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-xl font-bold text-white">
@@ -1216,12 +1217,13 @@ const Admin = () => {
                 </button>
               </div>
               
-              <form onSubmit={handleSavePost} className="space-y-4">
+              <form onSubmit={handleSavePost} className="space-y-4" key={`form-${editingPost.id || 'new'}`}>
                 <div>
                   <label className="block text-sm font-medium text-gray-300 mb-2">
                     Titre *
                   </label>
                   <input
+                    key={`title-${editingPost.id || 'new'}`}
                     type="text"
                     value={editingPost.title || ''}
                     onChange={(e) => setEditingPost({...editingPost, title: e.target.value})}
@@ -1235,6 +1237,7 @@ const Admin = () => {
                     Extrait *
                   </label>
                   <textarea
+                    key={`excerpt-${editingPost.id || 'new'}`}
                     value={editingPost.excerpt || ''}
                     onChange={(e) => setEditingPost({...editingPost, excerpt: e.target.value})}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
@@ -1248,6 +1251,7 @@ const Admin = () => {
                     Contenu *
                   </label>
                   <textarea
+                    key={`content-${editingPost.id || 'new'}`}
                     value={editingPost.content || ''}
                     onChange={(e) => setEditingPost({...editingPost, content: e.target.value})}
                     className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
@@ -1262,6 +1266,7 @@ const Admin = () => {
                       Catégorie *
                     </label>
                     <select
+                      key={`category-${editingPost.id || 'new'}`}
                       value={editingPost.category || ''}
                       onChange={(e) => setEditingPost({...editingPost, category: e.target.value})}
                       className="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded text-white"
@@ -1280,6 +1285,7 @@ const Admin = () => {
                       Date *
                     </label>
                     <input
+                      key={`date-${editingPost.id || 'new'}`}
                       type="date"
                       value={editingPost.date || ''}
                       onChange={(e) => setEditingPost({...editingPost, date: e.target.value})}
@@ -1290,6 +1296,7 @@ const Admin = () => {
                 </div>
                 
                 <ImageUpload
+                  key={`image-upload-${editingPost.id || 'new'}`}
                   currentImage={editingPost?.image_url}
                   onImageSelect={handleImageSelect}
                   onError={(message) => showAlert('error', message)}
@@ -1326,7 +1333,8 @@ const Admin = () => {
                 </div>
               </form>
             </div>
-          </div>
+          </div>,
+          document.body
         )}
 
         {/* Password Change Modal */}
